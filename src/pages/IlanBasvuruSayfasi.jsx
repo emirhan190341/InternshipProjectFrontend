@@ -14,6 +14,7 @@ import {
   Text,
   Textarea,
   UnorderedList,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -22,10 +23,15 @@ import { useParams } from "react-router-dom";
 const IlanBasvuruSayfasi = () => {
   const [jobDetails, setJobDetails] = useState(null);
 
-  const [firstName, setFirstname] = useState("");
+  const [firstname, setFirstname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
+
+  const toast = useToast();
+
+  const isError =
+    firstname === "" || email === "" || phone === "" || coverLetter === "";
 
   const params = useParams();
   // console.log(params);
@@ -53,8 +59,26 @@ const IlanBasvuruSayfasi = () => {
   }
 
   async function handleClick() {
+    if (
+      firstname === "" ||
+      email === "" ||
+      phone === "" ||
+      coverLetter === ""
+    ) {
+      toast({
+        title: "Error",
+        description: "Please fill all the fields.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position : "top"
+      });
+      return;
+    }
+
     const response = await fetch(
-      `http://localhost:8080/v1/job/${params.isIlani}`, //degiscek
+      // `http://localhost:8080/v1/job/${params.isIlani}`, //degiscek
+      "http://localhost:8080/v1/api/application", //degiscek
       {
         method: "POST",
         headers: {
@@ -62,7 +86,7 @@ const IlanBasvuruSayfasi = () => {
           Authorization: "Bearer " + localStorage.getItem("tokenKey"),
         },
         body: JSON.stringify({
-          firstName: firstName,
+          firstname: firstname,
           email: email,
           phone: phone,
           coverLetter: coverLetter,
@@ -70,6 +94,18 @@ const IlanBasvuruSayfasi = () => {
       }
     );
     const body = await response.json();
+    toast({
+      title: "Applied successfully.",
+      description: "We got your application.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+
+    setFirstname("");
+    setEmail("");
+    setPhone("");
+    setCoverLetter("");
   }
 
   return (
@@ -121,29 +157,33 @@ const IlanBasvuruSayfasi = () => {
           </Flex>
         </Link>
 
-        <Flex gap={7} mb={20} mt={20}>
-          <Text fontWeight={"bold"}>Basic Info</Text>
-          <FormControl isRequired>
-            <FormLabel>First name</FormLabel>
-            <Input
-              onChange={(e) => setFirstname(e.target.value)}
-              value={firstName}
-              placeholder="First name"
-            />
-            <FormLabel mt={7}>Email </FormLabel>
-            <Input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              placeholder="Email"
-            />
-            <FormLabel mt={7}>Phone</FormLabel>
-            <Input
-              onChange={(e) => setPhone(e.target.value)}
-              value={phone}
-              placeholder="Phone"
-            />
-          </FormControl>
-        </Flex>
+        <form>
+          <Flex gap={7} mb={20} mt={20}>
+            <Text fontWeight={"bold"}>Basic Info</Text>
+            <FormControl isRequired>
+              <FormLabel>First name</FormLabel>
+              <Input
+                isRequired={true}
+                onChange={(e) => setFirstname(e.target.value)}
+                value={firstname}
+                placeholder="First name"
+              />
+
+              <FormLabel mt={7}>Email </FormLabel>
+              <Input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                placeholder="Email"
+              />
+              <FormLabel mt={7}>Phone</FormLabel>
+              <Input
+                onChange={(e) => setPhone(e.target.value)}
+                value={phone}
+                placeholder="Phone"
+              />
+            </FormControl>
+          </Flex>
+        </form>
 
         <Box width={"full"} bg={"gray"} height="1px" my={4}></Box>
 
