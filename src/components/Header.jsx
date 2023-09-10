@@ -33,10 +33,8 @@ const Header = () => {
   const handleLogOut = () => {
     localStorage.removeItem("tokenKey");
     localStorage.removeItem("email");
-    navigate("/giris")
-
-  }
-
+    navigate("/giris");
+  };
 
   return (
     <>
@@ -88,6 +86,14 @@ const Header = () => {
                 </Flex>
               </Flex>
 
+              {user && (
+                <Flex>
+                  <Link href={"/aday"} display={"inline-block"}>
+                    <Text fontFamily={"sans-serif"}>My Profile</Text>
+                  </Link>
+                </Flex>
+              )}
+
               {!user && (
                 <Flex>
                   <Link href={"/kaydol"} display={"inline-block"}>
@@ -98,7 +104,13 @@ const Header = () => {
 
               {user && (
                 <Flex>
-                    <Button onClick={handleLogOut}   bg={"white"} fontFamily={"sans-serif"}>Log Out</Button>
+                  <Button
+                    onClick={handleLogOut}
+                    bg={"white"}
+                    fontFamily={"sans-serif"}
+                  >
+                    Log Out
+                  </Button>
                 </Flex>
               )}
             </Flex>

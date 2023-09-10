@@ -23,7 +23,7 @@ function App() {
         <Route path="/giris" element={ localStorage.getItem("tokenKey") != null ? <Navigate to="/"/> :<LoginSayfasi />} />
         <Route path="/is-ilanlari" element={<IsIlanlariSayfasi />} />
         <Route path="/is-ilanlari/:isIlani" element={<BasvuruSayfasi />} />
-        <Route path="/aday/:uid" element={<AdaySayfasi />} />
+        <Route path="/aday" element={<AdaySayfasi />} />
         <Route path="/is-ilanlari/ilanEkleme" element={<IlanEKleme />} />
         <Route path="/" element={<GirisSayfasi />} />
         <Route path="/kariyer" element={<KariyerSayfasi />} />

@@ -7,10 +7,36 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Basvurularim from "../components/Basvurularim";
+import { useParams } from "react-router-dom";
 
 const AdaySayfasi = () => {
+  const [kullaniciDetails, setKullaniciDetails] = useState("");
+
+  const [positionData, setPositionData] = useState("");
+
+  const params = useParams();
+
+  useEffect(() => {
+    async function getKullaniciData() {
+      const response = await fetch(
+        `http://localhost:8080/v1/api/applicant/${localStorage.email}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("tokenKey"),
+          },
+        }
+      );
+      const body = await response.json();
+      setKullaniciDetails(body);
+    }
+    getKullaniciData();
+  }, [params]);
+  
+
+ 
   return (
     <>
       <Container mt={"5"} maxW={"750px"}>
@@ -21,7 +47,7 @@ const AdaySayfasi = () => {
             size={"2xl"}
           />
           <Box mt={"5"}>
-            <Text fontWeight={"bold"}>Emirhan ARICI</Text>
+            <Text fontWeight={"bold"}>{kullaniciDetails.firstname}</Text>
             <Text mt={"3"}>Frontend Developer</Text>
           </Box>
         </Flex>
@@ -35,7 +61,7 @@ const AdaySayfasi = () => {
 
         <Box fontSize={"lg"} ml={"5"}>
           <Flex gap={"1"} mb={"2"}>
-            <Text fontWeight={"bold"}>Fullname:</Text>
+            <Text fontWeight={"bold"}>Full name:</Text>
             <Text>Emirhan Arici</Text>
           </Flex>
           <Flex gap={"1"} mb={"2"}>
@@ -52,14 +78,13 @@ const AdaySayfasi = () => {
           </Flex>
           <Flex gap={"1"}>
             <Text fontWeight={"bold"}>Email:</Text>
-            <Text>deneme@gmail.com</Text>
+            <Text>{kullaniciDetails.email}</Text>
           </Flex>
         </Box>
 
         <Container maxW={"1000px"} mt={"10"}>
           <Basvurularim />
         </Container>
-
       </Container>
     </>
   );

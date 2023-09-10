@@ -29,6 +29,8 @@ const Basvuru = ({
       : status === "Processing"
       ? "yellow.900"
       : "green.900";
+
+
   return (
     <>
       <Card mt={"10"}>

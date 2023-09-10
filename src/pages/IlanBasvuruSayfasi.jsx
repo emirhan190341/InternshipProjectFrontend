@@ -76,6 +76,8 @@ const IlanBasvuruSayfasi = () => {
       return;
     }
 
+
+
     const response = await fetch(
       // `http://localhost:8080/v1/job/${params.isIlani}`, //degiscek
       "http://localhost:8080/v1/api/application", //degiscek
@@ -90,6 +92,9 @@ const IlanBasvuruSayfasi = () => {
           email: email,
           phone: phone,
           coverLetter: coverLetter,
+          userId : email,
+          jobId :  params.isIlani
+
         }),
       }
     );
@@ -161,7 +166,7 @@ const IlanBasvuruSayfasi = () => {
           <Flex gap={7} mb={20} mt={20}>
             <Text fontWeight={"bold"}>Basic Info</Text>
             <FormControl isRequired>
-              <FormLabel>First name</FormLabel>
+              <FormLabel>Full name</FormLabel>
               <Input
                 isRequired={true}
                 onChange={(e) => setFirstname(e.target.value)}
